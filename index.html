@@ -172,7 +172,7 @@
         font-size: 0.65rem;
       }
 
-      /* New mobile header */
+      /* Centered mobile header */
       .mobile-header {
         display: flex;
         align-items: center;
@@ -187,6 +187,13 @@
         border-bottom: 2px solid #6f1ab6;
       }
 
+      .mobile-header .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
       .mobile-header .company-logo {
         width: 32px;
         height: 32px;
@@ -194,7 +201,6 @@
       }
 
       .mobile-header .company-name {
-        margin-left: 0.5rem;
         font-size: 1.2rem;
       }
 
@@ -229,10 +235,12 @@
 
   <!-- Mobile header (only visible on small screens) -->
   <header class="mobile-header">
-    <div class="company-logo">
-      <img src="logotry.gif" alt="UniDrop Logo">
+    <div class="header-inner">
+      <div class="company-logo">
+        <img src="logotry.gif" alt="UniDrop Logo">
+      </div>
+      <div class="company-name">UniDrop</div>
     </div>
-    <div class="company-name">UniDrop</div>
   </header>
 
   <!-- Main Content -->
@@ -243,7 +251,7 @@
 
     <section>
       <div class="content-box">
-        <p>Welcome to UniDrop! On <b>desktop</b>, UniDrop appears in the sidebar. On <b>mobile</b>, UniDrop moves to the top as a header, while navigation stays at the bottom.</p>
+        <p>Welcome to UniDrop! On <b>desktop</b>, UniDrop appears in the sidebar. On <b>mobile</b>, UniDrop is now <b>centered</b> at the top, while navigation stays at the bottom.</p>
       </div>
     </section>
   </main>
