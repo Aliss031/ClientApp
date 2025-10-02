@@ -98,14 +98,18 @@
     /* Message input */
     .chat-input {
       position: fixed;
-      bottom: 60px;
-      left: 0;
-      width: 100%;
+      bottom: 60px;          /* sits above bottom nav */
+      left: 50%;             /* move starting point to center */
+      transform: translateX(-50%); /* pull it back by half its width */
+      width: 90%;
+      max-width: 600px;      /* optional: stops it from stretching too much */
       display: flex;
       background: #3c1f60;
       padding: 0.5rem;
       border-top: 2px solid #6f1ab6;
+      border-radius: 12px;   /* optional: rounded look */
     }
+
 
     .chat-input input {
       flex: 1;
@@ -183,7 +187,7 @@
 
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
-    <a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="client.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="clientchat.html" class="active"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></a>
     <a href="profile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
