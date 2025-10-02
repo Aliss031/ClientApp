@@ -135,8 +135,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
+
+      position: absolute;   /* ⬅ instead of relative */
+      left: 50%;            /* push to middle */
+      transform: translateX(-50%) translateY(-25%); /* perfectly centered */
       bottom: 25px;
+
       box-shadow: 0 6px 18px rgba(0,0,0,0.4);
       transition: transform 0.25s ease;
     }
@@ -275,3 +279,4 @@
   </script>
 </body>
 </html>
+
