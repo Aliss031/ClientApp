@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UniDrop Chat</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: #24033d;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* 🔹 Mobile header */
+    .mobile-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #3c1f60;
+      padding: 0.75rem 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      border-bottom: 2px solid #6f1ab6;
+    }
+
+    .mobile-header .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .mobile-header .company-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .mobile-header .company-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .mobile-header .company-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    /* Chat area */
+    .chat-container {
+      flex: 1;
+      margin-top: 60px; /* space for header */
+      margin-bottom: 70px; /* space for bottom nav */
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      word-wrap: break-word;
+    }
+
+    .message.user {
+      background: #6f1ab6;
+      align-self: flex-end;
+    }
+
+    .message.admin {
+      background: #622aac;
+      align-self: flex-start;
+    }
+
+    /* Message input */
+    .chat-input {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      background: #3c1f60;
+      padding: 0.5rem;
+      border-top: 2px solid #6f1ab6;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 20px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .chat-input button {
+      margin-left: 0.5rem;
+      background: #6f1ab6;
+      border: none;
+      color: white;
+      padding: 0.6rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: #3c1f60;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 2px solid #6f1ab6;
+    }
+
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      font-size: 0.75rem;
+    }
+
+    .bottom-nav a i {
+      font-size: 1.2rem;
+      margin-bottom: 2px;
+    }
+
+    .bottom-nav a.active {
+      color: #ffcc66;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top header -->
+  <header class="mobile-header">
+    <div class="header-inner">
+      <div class="company-logo">
+        <img src="logotry.gif" alt="UniDrop Logo">
+      </div>
+      <div class="company-name">UniDrop</div>
+    </div>
+  </header>
+
+  <!-- Chat area -->
+  <main class="chat-container" id="chat-container">
+    <!-- Messages will load here -->
+  </main>
+
+  <!-- Message input -->
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="home.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="clientchat.html" class="active"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></a>
+    <a href="profile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+  </nav>
+
+  <script>
+    // Firebase config (use your own project keys)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjP_ZvkY1cwCmPE738KMGYOohZJt4py3c",
+      authDomain: "parcel-pin-system.firebaseapp.com",
+      projectId: "parcel-pin-system",
+      storageBucket: "parcel-pin-system.firebasestorage.app",
+      messagingSenderId: "444891168630",
+      appId: "1:444891168630:web:7dacb5087988c6325ac457"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const chatContainer = document.getElementById("chat-container");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // Replace this with the logged-in user's ID (for now just example)
+    const userId = "user123"; 
+
+    // Load messages
+    db.collection("chat")
+      .orderBy("timestamp")
+      .onSnapshot(snapshot => {
+        chatContainer.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.classList.add("message");
+          div.classList.add(data.sender === "admin" ? "admin" : "user");
+          div.textContent = data.text;
+          chatContainer.appendChild(div);
+        });
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      });
+
+    // Send message
+    sendBtn.addEventListener("click", async () => {
+      const text = messageInput.value.trim();
+      if (text === "") return;
+
+      await db.collection("chat").add({
+        text,
+        sender: userId,  // identify this as user
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      messageInput.value = "";
+    });
+
+    messageInput.addEventListener("keypress", e => {
+      if (e.key === "Enter") sendBtn.click();
+    });
+  </script>
+</body>
+</html>
