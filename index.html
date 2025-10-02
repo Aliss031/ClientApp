@@ -189,12 +189,13 @@
         bottom: 0;
         top: auto;
         width: 100%;
-        height: 60px;
+        height: 70px;
         flex-direction: row;
         align-items: center;
         justify-content: space-around;
         padding: 0.5rem;
         border-radius: 0;
+        background: #2e1f47; /* matte background */
       }
 
       .company-wrapper,
@@ -211,31 +212,45 @@
 
       nav a {
         flex-direction: column;
-        gap: 0.2rem;
+        gap: 0.3rem;
         font-size: 0.75rem;
         padding: 0.5rem;
-      }
-
-      nav a span {
-        font-size: 0.65rem;
-      }
-
-      /* Make QR button bigger on mobile */
-      .qr-nav {
-        font-size: 0.85rem;
-        background: #ffcc66;
+        background: #3c2a57;
         border-radius: 50%;
         width: 50px;
         height: 50px;
         align-items: center;
         justify-content: center;
-        position: relative;
-        bottom: 10px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+        transition: transform 0.2s ease, background 0.3s ease;
       }
 
-      .qr-nav i {
-        font-size: 1.4rem;
+      nav a:hover {
+        background: #4a356b;
+        transform: scale(1.1);
+      }
+
+      nav a i {
+        font-size: 1.2rem;
         margin: 0;
+      }
+
+      nav a span {
+        display: none; /* Hide text on mobile */
+      }
+
+      /* Make QR button more prominent */
+      .qr-nav {
+        background: #e0c266;
+        color: #24033d !important;
+        width: 60px;
+        height: 60px;
+        font-size: 1rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      }
+
+      .qr-nav:hover {
+        background: #f0d97a;
       }
 
       /* Centered mobile header */
@@ -273,7 +288,7 @@
       .main-content {
         margin-left: 0;
         margin-top: 60px; /* space for top header */
-        margin-bottom: 70px; /* space for bottom nav */
+        margin-bottom: 80px; /* space for bottom nav */
         padding: 1rem;
       }
     }
@@ -292,7 +307,7 @@
     <div class="divider"></div>
 
     <nav>
-      <a href="client.html" class="active"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+      <a href="index.html" class="active"><i class="fa-solid fa-house"></i> <span>Home</span></a>
       <a href="clientchat.html"><i class="fa-solid fa-comment-dots"></i> <span>Chat</span></a>
 
       <!-- 🔹 QR Nav in the middle -->
