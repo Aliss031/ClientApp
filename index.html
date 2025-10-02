@@ -105,6 +105,18 @@
       font-size: 1.2rem;
     }
 
+    /* Make QR nav stand out */
+    .qr-nav {
+      background: #ffcc66;
+      color: #24033d !important;
+      font-weight: 700;
+      justify-content: center;
+    }
+
+    .qr-nav:hover {
+      background: #ffdd88;
+    }
+
     /* Main content */
     .main-content {
       margin-left: 200px;
@@ -127,6 +139,42 @@
       padding: 1.5rem;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    /* QR Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      color: black;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    .modal-content img {
+      width: 200px;
+      height: 200px;
+    }
+
+    .close-btn {
+      margin-top: 1rem;
+      background: #6f1ab6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
     }
 
     /* 🔹 Mobile view */
@@ -170,6 +218,24 @@
 
       nav a span {
         font-size: 0.65rem;
+      }
+
+      /* Make QR button bigger on mobile */
+      .qr-nav {
+        font-size: 0.85rem;
+        background: #ffcc66;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        bottom: 10px;
+      }
+
+      .qr-nav i {
+        font-size: 1.4rem;
+        margin: 0;
       }
 
       /* Centered mobile header */
@@ -226,8 +292,12 @@
     <div class="divider"></div>
 
     <nav>
-      <a href="home.html" class="active"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+      <a href="client.html" class="active"><i class="fa-solid fa-house"></i> <span>Home</span></a>
       <a href="clientchat.html"><i class="fa-solid fa-comment-dots"></i> <span>Chat</span></a>
+
+      <!-- 🔹 QR Nav in the middle -->
+      <a href="#" class="qr-nav" id="qrBtn"><i class="fa-solid fa-qrcode"></i> <span>QR</span></a>
+
       <a href="profile.html"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
       <a href="settings.html"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>
     </nav>
@@ -251,10 +321,41 @@
 
     <section>
       <div class="content-box">
-        <p>Welcome to UniDrop! On <b>desktop</b>, UniDrop appears in the sidebar. On <b>mobile</b>, UniDrop is now <b>centered</b> at the top, while navigation stays at the bottom.</p>
+        <p>Welcome to UniDrop! On <b>desktop</b>, UniDrop appears in the sidebar. On <b>mobile</b>, UniDrop is now <b>centered</b> at the top, while navigation stays at the bottom. There’s also a <b>QR button</b> for quick scanning.</p>
       </div>
     </section>
   </main>
+
+  <!-- QR Modal -->
+  <div class="modal" id="qrModal">
+    <div class="modal-content">
+      <h2>Scan this QR</h2>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UniDropExample" alt="QR Code">
+      <br>
+      <button class="close-btn" id="closeModal">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const qrBtn = document.getElementById("qrBtn");
+    const qrModal = document.getElementById("qrModal");
+    const closeModal = document.getElementById("closeModal");
+
+    qrBtn.addEventListener("click", e => {
+      e.preventDefault();
+      qrModal.style.display = "flex";
+    });
+
+    closeModal.addEventListener("click", () => {
+      qrModal.style.display = "none";
+    });
+
+    // Close modal if clicked outside content
+    window.addEventListener("click", e => {
+      if (e.target === qrModal) {
+        qrModal.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
-
