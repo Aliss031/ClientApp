@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UniDrop Mobile Dashboard</title>
+  <title>UniDrop App Layout</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -19,9 +19,10 @@
       color: white;
       display: flex;
       min-height: 100vh;
+      flex-direction: row;
     }
 
-    /* Sidebar for desktop */
+    /* Sidebar (desktop) */
     .sidebar {
       position: fixed;
       top: 0;
@@ -128,12 +129,13 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
-    /* 🔹 Mobile view adjustments */
+    /* 🔹 Mobile view */
     @media (max-width: 768px) {
       body {
         flex-direction: column;
       }
 
+      /* Sidebar turns into bottom nav */
       .sidebar {
         position: fixed;
         bottom: 0;
@@ -170,8 +172,35 @@
         font-size: 0.65rem;
       }
 
+      /* New mobile header */
+      .mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #3c1f60;
+        padding: 0.75rem 1rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        border-bottom: 2px solid #6f1ab6;
+      }
+
+      .mobile-header .company-logo {
+        width: 32px;
+        height: 32px;
+        margin-left: 0;
+      }
+
+      .mobile-header .company-name {
+        margin-left: 0.5rem;
+        font-size: 1.2rem;
+      }
+
       .main-content {
         margin-left: 0;
+        margin-top: 60px; /* space for top header */
         margin-bottom: 70px; /* space for bottom nav */
         padding: 1rem;
       }
@@ -191,23 +220,30 @@
     <div class="divider"></div>
 
     <nav>
-      <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i> <span>Home</span></a>
-      <a href="parcels.html"><i class="fa-solid fa-box"></i> <span>Parcels</span></a>
-      <a href="users.html"><i class="fa-solid fa-users"></i> <span>Users</span></a>
-      <a href="feedback.html"><i class="fa-solid fa-comment-dots"></i> <span>Feedback</span></a>
+      <a href="home.html" class="active"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+      <a href="chat.html"><i class="fa-solid fa-comment-dots"></i> <span>Chat</span></a>
+      <a href="profile.html"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
       <a href="settings.html"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>
     </nav>
   </aside>
 
+  <!-- Mobile header (only visible on small screens) -->
+  <header class="mobile-header">
+    <div class="company-logo">
+      <img src="logotry.gif" alt="UniDrop Logo">
+    </div>
+    <div class="company-name">UniDrop</div>
+  </header>
+
   <!-- Main Content -->
   <main class="main-content">
     <header class="topbar">
-      <h1>Mobile-Friendly Dashboard</h1>
+      <h1>Home</h1>
     </header>
 
     <section>
       <div class="content-box">
-        <p>This layout keeps the sidebar on desktop, but switches to a bottom navigation bar on mobile for a true app-like experience.</p>
+        <p>Welcome to UniDrop! On <b>desktop</b>, UniDrop appears in the sidebar. On <b>mobile</b>, UniDrop moves to the top as a header, while navigation stays at the bottom.</p>
       </div>
     </section>
   </main>
