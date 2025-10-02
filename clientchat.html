@@ -19,58 +19,56 @@
     body {
       margin: 0;
       font-family: 'Roboto', Arial, sans-serif;
-      background: #24033d;
+      background: linear-gradient(180deg, #2a0845, #20002c);
       color: white;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
 
-    /* 🔹 Mobile header */
+    /* Top header */
     .mobile-header {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #3c1f60;
-      padding: 0.75rem 1rem;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 10;
-      border-bottom: 2px solid #6f1ab6;
+      background: linear-gradient(90deg, #6f1ab6, #9a33db);
+      padding: 0.85rem 1.2rem;
+      border-bottom: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .mobile-header .header-inner {
+
+    .header-inner {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
-    .mobile-header .company-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+    .company-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
 
-    .mobile-header .company-logo img {
+    .company-logo img {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
 
-    .mobile-header .company-name {
-      font-size: 1.2rem;
+    .company-name {
+      font-size: 1.4rem;
       font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
     /* Chat area */
     .chat-container {
       flex: 1;
-      margin-top: 60px; /* space for header */
-      margin-bottom: 70px; /* space for bottom nav */
+      margin-top: 70px;  /* leave space for header */
+      margin-bottom: 120px; /* leave space for input + nav */
       padding: 1rem;
       display: flex;
       flex-direction: column;
@@ -95,21 +93,21 @@
       align-self: flex-start;
     }
 
-    /* Message input */
+    /* Chat input */
     .chat-input {
       position: fixed;
-      bottom: 60px;          /* sits above bottom nav */
-      left: 50%;             /* move starting point to center */
-      transform: translateX(-50%); /* pull it back by half its width */
-      width: 95%;
-      max-width: 600px;      /* optional: stops it from stretching too much */
+      bottom: 85px; /* above nav bar */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 600px;
       display: flex;
       background: #3c1f60;
       padding: 0.5rem;
-      border-top: 2px solid #6f1ab6;
-      border-radius: 12px;   /* optional: rounded look */
+      border: 2px solid #6f1ab6;
+      border-radius: 12px;
+      z-index: 5;
     }
-
 
     .chat-input input {
       flex: 1;
@@ -130,41 +128,72 @@
       cursor: pointer;
     }
 
-    /* Bottom nav */
-    .bottom-nav {
+    /* Bottom Nav (floating style) */
+    nav {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background: #3c1f60;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: 65px;
+      background: rgba(108,44,187,0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
-      border-top: 2px solid #6f1ab6;
+      padding: 0 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 4;
     }
 
-    .bottom-nav a {
+    nav a {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 0.2rem;
       text-decoration: none;
-      color: white;
-      font-size: 0.75rem;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
 
-    .bottom-nav a i {
-      font-size: 1.2rem;
-      margin-bottom: 2px;
+    nav a i {
+      font-size: 1.3rem;
     }
 
-    .bottom-nav a.active {
+    nav a.active {
       color: #ffcc66;
+      transform: scale(1.1);
+    }
+
+    /* Special QR button */
+    .qr-nav {
+      background: #ffcc66;
+      color: #24033d !important;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      left: 83%;
+      transform: translateX(-50%) translateY(-25%);
+      bottom: 90px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      transition: transform 0.25s ease;
+    }
+
+    .qr-nav i {
+      font-size: 2.5rem;
+      color: #24033d;
     }
   </style>
 </head>
 <body>
-  <!-- Top header -->
+  <!-- Header -->
   <header class="mobile-header">
     <div class="header-inner">
       <div class="company-logo">
@@ -179,22 +208,23 @@
     <!-- Messages will load here -->
   </main>
 
-  <!-- Message input -->
+  <!-- Chat input -->
   <div class="chat-input">
     <input type="text" id="messageInput" placeholder="Type your message...">
     <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
   </div>
 
-  <!-- Bottom Navigation -->
-  <nav class="bottom-nav">
-    <a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <!-- Bottom Nav -->
+  <nav>
+    <a href="client.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="clientchat.html" class="active"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></a>
+    <a href="#" class="qr-nav" id="qrBtn"><i class="fa-solid fa-qrcode"></i></a>
     <a href="profile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
   </nav>
 
+  <!-- Firebase Script -->
   <script>
-    // Firebase config (use your own project keys)
     const firebaseConfig = {
       apiKey: "AIzaSyCjP_ZvkY1cwCmPE738KMGYOohZJt4py3c",
       authDomain: "parcel-pin-system.firebaseapp.com",
@@ -211,10 +241,8 @@
     const messageInput = document.getElementById("messageInput");
     const sendBtn = document.getElementById("sendBtn");
 
-    // Replace this with the logged-in user's ID (for now just example)
-    const userId = "user123"; 
+    const userId = "user123";
 
-    // Load messages
     db.collection("chat")
       .orderBy("timestamp")
       .onSnapshot(snapshot => {
@@ -230,14 +258,13 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       });
 
-    // Send message
     sendBtn.addEventListener("click", async () => {
       const text = messageInput.value.trim();
       if (text === "") return;
 
       await db.collection("chat").add({
         text,
-        sender: userId,  // identify this as user
+        sender: userId,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
