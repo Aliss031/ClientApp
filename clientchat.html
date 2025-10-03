@@ -16,27 +16,30 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <style>
-    body {
+    html, body {
       margin: 0;
+      height: 100%;
+    }
+
+    body {
       font-family: 'Roboto', Arial, sans-serif;
       background: linear-gradient(180deg, #2a0845, #20002c);
       color: white;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
 
-    /* Top header */
+    /* Header */
     .mobile-header {
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       background: linear-gradient(90deg, #6f1ab6, #9a33db);
       padding: 0.85rem 1.2rem;
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      flex-shrink: 0;
     }
 
     .header-inner {
@@ -65,16 +68,16 @@
       letter-spacing: 0.5px;
     }
 
-    /* Chat area */
+    /* Chat area fills available space */
     .chat-container {
       flex: 1;
-      margin-top: 50px;
-      margin-bottom: 90px; /* leave space for input + nav */
-      padding: 0.5rem;
       display: flex;
       flex-direction: column;
+      justify-content: flex-end; /* messages start from bottom */
+      padding: 0.5rem;
       gap: 0.5rem;
-      overflow-y: auto;
+      overflow: hidden; /* disable scrolling */
+      flex-wrap: wrap;
     }
 
     .message {
@@ -87,8 +90,6 @@
     .message.user {
       background: #6f1ab6;
       align-self: flex-end;
-      transform: translateY(5px);
-      margin-right: 10px;
     }
 
     .message.admin {
@@ -96,10 +97,10 @@
       align-self: flex-start;
     }
 
-    /* Chat input */
+    /* Chat input fixed above nav */
     .chat-input {
       position: fixed;
-      bottom: 70px; /* above nav */
+      bottom: 65px; /* just above nav */
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -131,11 +132,10 @@
       cursor: pointer;
     }
 
-    /* Bottom Nav */
+    /* Bottom nav */
     nav {
       position: fixed;
       bottom: 0;
-      top: 620px;
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -149,6 +149,7 @@
       align-items: center;
       padding: 0 1rem;
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      flex-shrink: 0;
     }
 
     nav a {
@@ -173,7 +174,6 @@
       text-shadow: 0 0 10px #6c22a3, 0 0 20px #4f0b93;
       font-weight: bold;
     }
-
   </style>
 </head>
 <body>
@@ -189,7 +189,7 @@
 
   <!-- Chat area -->
   <main class="chat-container" id="chat-container">
-    <!-- Messages will load here -->
+    <!-- Messages will appear here, stacked from bottom -->
   </main>
 
   <!-- Chat input -->
@@ -238,19 +238,16 @@
           div.textContent = data.text;
           chatContainer.appendChild(div);
         });
-        chatContainer.scrollTop = chatContainer.scrollHeight;
       });
 
     sendBtn.addEventListener("click", async () => {
       const text = messageInput.value.trim();
-      if (text === "") return;
-
+      if (!text) return;
       await db.collection("chat").add({
         text,
         sender: userId,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
-
       messageInput.value = "";
     });
 
