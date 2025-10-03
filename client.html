@@ -24,17 +24,15 @@
 
     /* Top header */
     .mobile-header {
-      position: fixed; /* fixed so it doesn't move */
-      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       background: linear-gradient(90deg, #6f1ab6, #9a33db);
       padding: 0.85rem 1.2rem;
+      border-bottom: none;
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      z-index: 10;
     }
 
     .header-inner {
@@ -66,10 +64,8 @@
     /* Main content */
     .main-content {
       flex: 1;
-      margin-top: 70px; /* height of header */
-      margin-bottom: 90px; /* height of nav */
       padding: 1.2rem;
-      overflow-y: auto; /* enable scrolling */
+      margin-bottom: 85px;
     }
 
     .topbar h1 {
@@ -86,7 +82,6 @@
       -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.4);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-      margin-bottom: 1rem; /* spacing between boxes */
     }
 
     .content-box:hover {
@@ -97,7 +92,7 @@
     /* Bottom Nav (floating style) */
     nav {
       position: fixed;
-      bottom: 0;
+      bottom: 2px;
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -107,15 +102,14 @@
       border-top-left-radius: 40px;
       border-top-right-radius: 40px;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* equal gaps */
       align-items: center;
-      padding: 0 1rem;
+      padding: 0 1rem; /* keep some padding on sides */
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      z-index: 10;
     }
 
     nav a {
-      flex: 1;
+      flex: 1;                      /* ⬅ each link takes equal width */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -125,6 +119,7 @@
       font-size: 0.8rem;
       transition: color 0.2s ease, transform 0.2s ease;
     }
+
 
     nav a i {
       font-size: 1.3rem;
@@ -137,6 +132,7 @@
       font-weight: bold;
     }
 
+
     /* Special QR button */
     .qr-nav {
       background: #ffcc66;
@@ -147,10 +143,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
-      left: 50%;
-      transform: translateX(50%) translateY(-25%);
+
+      position: absolute;   /* ⬅ instead of relative */
+      left: 83%;            /* push to middle */
+      transform: translateX(-50%) translateY(-25%); /* perfectly centered */
       bottom: 90px;
+
       box-shadow: 0 6px 18px rgba(0,0,0,0.4);
       transition: transform 0.25s ease;
     }
@@ -217,6 +215,7 @@
       to {transform: scale(1); opacity: 1;}
     }
   </style>
+
 </head>
 <body>
 
@@ -239,30 +238,6 @@
     <section>
       <div class="content-box">
         <p>Welcome to UniDrop! This layout is <b>mobile-only</b> with UniDrop branding at the top and navigation at the bottom.</p>
-      </div>
-      <div class="content-box">
-        <p>Here’s another content box to show spacing and scrolling.</p>
-      </div>
-      <div class="content-box">
-        <p>Scrollable content works while header and nav stay fixed.</p>
-      </div>
-      <div class="content-box">
-        <p>Welcome to UniDrop! This layout is <b>mobile-only</b> with UniDrop branding at the top and navigation at the bottom.</p>
-      </div>
-      <div class="content-box">
-        <p>Here’s another content box to show spacing and scrolling.</p>
-      </div>
-      <div class="content-box">
-        <p>Scrollable content works while header and nav stay fixed.</p>
-      </div>
-      <div class="content-box">
-        <p>Welcome to UniDrop! This layout is <b>mobile-only</b> with UniDrop branding at the top and navigation at the bottom.</p>
-      </div>
-      <div class="content-box">
-        <p>Here’s another content box to show spacing and scrolling.</p>
-      </div>
-      <div class="content-box">
-        <p>Scrollable content works while header and nav stay fixed.</p>
       </div>
     </section>
   </main>
@@ -308,3 +283,5 @@
   </script>
 </body>
 </html>
+
+Can you do the scrolling thing you did in clientchat into here, I want the mobile header and nav to not move as well
