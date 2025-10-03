@@ -25,11 +25,6 @@
 
     /* Fixed Top Header */
     .mobile-header {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 97.5%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -38,7 +33,8 @@
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      z-index: 20;
+      z-index: 10;
+      position: relative;
     }
 
     .header-inner {
