@@ -44,7 +44,6 @@
       width: 90px;
       height: 90px;
       margin-bottom: 0.8rem;
-      gap: 2rem;
     }
 
     .signin-header h2 {
@@ -111,11 +110,9 @@
     .company-logo {
       width: 70px;
       height: 70px;
-      border-radius: 20%; /* circle */
-      object-fit: cover;  /* make sure it fills nicely */
+      border-radius: 20%; /* rounded */
+      object-fit: cover;
     }
-
-
   </style>
 </head>
 <body>
@@ -123,7 +120,7 @@
     <div class="signin-header">
      <img src="logotry.gif" alt="UniDrop Logo" class="company-logo">
      <h2>Welcome Back</h2>
-  </div>
+    </div>
 
     <div class="input-group">
       <i class="fa-solid fa-envelope"></i>
@@ -143,7 +140,7 @@
   </div>
 
   <script>
-    // Example sign-in handler (replace with Firebase auth if needed)
+    // Redirect to client.html when button clicked
     document.getElementById("signinBtn").addEventListener("click", () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -153,8 +150,8 @@
         return;
       }
 
-      // TODO: Replace this with Firebase Authentication logic
-      alert(`Logging in with: ${email}`);
+      // If email & password entered, redirect to client.html
+      window.location.href = "client.html";
     });
   </script>
 </body>
