@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UniDrop QR</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(180deg, #2a0845, #20002c);
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Top header */
+    .mobile-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(90deg, #6f1ab6, #9a33db);
+      padding: 0.85rem 1.2rem;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .company-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .company-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .company-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* QR Container */
+    .qr-container {
+      margin-top: 120px; /* space below header */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .qr-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    }
+
+    .qr-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    .timer-text {
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+    .regenerate-btn {
+      display: none;
+      background: #6f1ab6;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      font-size: 1rem;
+    }
+
+    /* Bottom Nav */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: 65px;
+      background: rgba(108,44,187,0.95);
+      backdrop-filter: blur(10px);
+      border-top-left-radius: 40px;
+      border-top-right-radius: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 10;
+    }
+
+    nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      text-decoration: none;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    nav a i {
+      font-size: 1.3rem;
+    }
+
+    nav a.active {
+      color: #e5c2ff;
+      transform: scale(1.2);
+      text-shadow: 0 0 10px #6c22a3, 0 0 20px #4f0b93;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="mobile-header">
+    <div class="header-inner">
+      <div class="company-logo">
+        <img src="logotry.gif" alt="UniDrop Logo">
+      </div>
+      <div class="company-name">UniDrop</div>
+    </div>
+  </header>
+
+  <!-- QR Content -->
+  <div class="qr-container">
+    <div class="qr-card" id="qrCard">
+      <div id="qrCode"></div>
+    </div>
+    <div class="timer-text" id="timerText">Expire in 10s</div>
+    <button class="regenerate-btn" id="regenerateBtn">Regenerate</button>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav>
+    <a href="client.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="clientchat.html"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></a>
+    <a href="clientQR.html" class="active"><i class="fa-solid fa-qrcode"></i><span>QR</span></a>
+    <a href="clientprofile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+  </nav>
+
+  <script>
+    const qrCard = document.getElementById("qrCard");
+    const qrCodeEl = document.getElementById("qrCode");
+    const timerText = document.getElementById("timerText");
+    const regenerateBtn = document.getElementById("regenerateBtn");
+
+    let qrCounter = 1;
+    let countdownInterval;
+
+    function generateQRContent() {
+      return "QR#" + qrCounter++;
+    }
+
+    function startCountdown(seconds = 10) {
+      let countdown = seconds;
+      timerText.textContent = `Expire in ${countdown}s`;
+      countdownInterval = setInterval(() => {
+        countdown--;
+        timerText.textContent = `Expire in ${countdown}s`;
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          expireQR();
+        }
+      }, 1000);
+    }
+
+    function createQR() {
+      qrCodeEl.innerHTML = ""; // clear previous
+      new QRCode(qrCodeEl, {
+        text: generateQRContent(),
+        width: 250,
+        height: 250,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    function expireQR() {
+      // Hide card & timer
+      qrCard.style.display = "none";
+      timerText.style.display = "none";
+      // Show regenerate button
+      regenerateBtn.style.display = "block";
+    }
+
+    function showQR() {
+      qrCard.style.display = "flex";
+      timerText.style.display = "block";
+      regenerateBtn.style.display = "none";
+      createQR();
+      startCountdown(10);
+    }
+
+    // Initial QR
+    showQR();
+
+    // Regenerate button click
+    regenerateBtn.addEventListener("click", () => {
+      showQR();
+    });
+  </script>
+</body>
+</html>
