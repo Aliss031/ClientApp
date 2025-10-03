@@ -39,16 +39,6 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    /* Back button */
-    .back-button {
-      position: absolute;
-      left: 1rem;
-      font-size: 1.4rem;
-      color: white;
-      text-decoration: none;
-      margin-left:10px;
-    }
-
     .header-inner {
       display: flex;
       align-items: center;
@@ -77,17 +67,14 @@
 
     /* Chat area */
     .chat-container {
-      flex: 3;
-      margin-top: 50px;  /* leave space for header */
-      margin-bottom: 70px; /* leave space for input */
+      flex: 1;
+      margin-top: 50px;
+      margin-bottom: 90px; /* leave space for input + nav */
       padding: 0.5rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
       overflow-y: auto;
-      height: calc(100vh - 150px); 
-  /* 150px = header height (≈70px) + input height (≈80px) */
-      margin: 0; /* remove extra space */
     }
 
     .message {
@@ -100,11 +87,9 @@
     .message.user {
       background: #6f1ab6;
       align-self: flex-end;
-      transform: translateY(9px);
+      transform: translateY(5px);
       margin-right: 10px;
     }
-
-
 
     .message.admin {
       background: #622aac;
@@ -114,7 +99,7 @@
     /* Chat input */
     .chat-input {
       position: fixed;
-      bottom: 20px; /* no nav now */
+      bottom: 70px; /* above nav */
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -145,12 +130,55 @@
       border-radius: 20px;
       cursor: pointer;
     }
+
+    /* Bottom Nav */
+    nav {
+      position: fixed;
+      top:628px;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: 65px;
+      background: rgba(108,44,187,0.95);
+      backdrop-filter: blur(10px);
+      border-top-left-radius: 40px;
+      border-top-right-radius: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      text-decoration: none;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    nav a i {
+      font-size: 1.3rem;
+    }
+
+    nav a.active {
+      color: #e5c2ff;
+      transform: scale(1.2);
+      text-shadow: 0 0 10px #6c22a3, 0 0 20px #4f0b93;
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
   <!-- Header -->
   <header class="mobile-header">
-    <a href="client.html" class="back-button"><i class="fa-solid fa-arrow-left"></i></a>
     <div class="header-inner">
       <div class="company-logo">
         <img src="logotry.gif" alt="UniDrop Logo">
@@ -169,6 +197,14 @@
     <input type="text" id="messageInput" placeholder="Type your message...">
     <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
   </div>
+
+  <!-- Bottom Nav -->
+  <nav>
+    <a href="client.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="clientchat.html" class="active"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></a>
+    <a href="clientprofile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+  </nav>
 
   <!-- Firebase Script -->
   <script>
