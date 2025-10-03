@@ -17,18 +17,23 @@
       font-family: 'Roboto', Arial, sans-serif;
       background: linear-gradient(180deg, #2a0845, #20002c);
       color: white;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden; /* prevent scrolling */
     }
 
-    /* Top header */
+    /* Fixed Top Header */
     .mobile-header {
       display: flex;
       align-items: center;
+      width: 97.5%;
       justify-content: center;
       background: linear-gradient(90deg, #6f1ab6, #9a33db);
       padding: 0.85rem 1.2rem;
+      border-bottom: none;
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
@@ -60,17 +65,25 @@
       letter-spacing: 0.5px;
     }
 
-    /* Main content */
+    /* Main content centered between header & nav */
     .main-content {
       flex: 1;
-      padding: 1.2rem;
-      margin-bottom: 85px;
+      margin-top: 100px;  /* push below header */
+      margin-bottom: 90px; /* push above nav */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; /* vertical centering */
+      width: 100%;
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
     .topbar h1 {
       margin: 0 0 1rem 0;
       font-size: 1.6rem;
       font-weight: 600;
+      text-align: center;
     }
 
     /* Profile card */
@@ -82,17 +95,18 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      max-width: 320px;
+      width: 100%;
     }
 
     .profile-card .avatar {
       width: 120px;
       height: 120px;
-      border-radius: 50%; /* fully round */
+      border-radius: 50%;
       border: 3px solid #6f1ab6;
-      margin: 0 auto 1rem auto; /* center horizontally and keep bottom margin */
+      margin: 0 auto 1rem auto;
       overflow: hidden;
     }
-
 
     .profile-card .avatar img {
       width: 100%;
@@ -142,10 +156,10 @@
       opacity: 0.9;
     }
 
-    /* Bottom Nav */
+    /* Fixed Bottom Nav */
     nav {
       position: fixed;
-      bottom: 0.7px;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -159,6 +173,7 @@
       align-items: center;
       padding: 0 1rem;
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 10;
     }
 
     nav a {
