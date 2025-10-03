@@ -38,12 +38,19 @@
       border-bottom-right-radius: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       z-index: 10;
+      position: relative;
     }
 
     .header-inner {
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      transition: opacity 0.2s;
+    }
+
+    .header-inner.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .company-logo {
@@ -76,7 +83,10 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
-      right: 10px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: opacity 0.2s;
     }
 
     /* Scrollable chat container */
@@ -200,8 +210,8 @@
 </head>
 <body>
   <!-- Header -->
-  <header class="mobile-header">
-    <div class="header-inner">
+  <header class="mobile-header" id="mobileHeader">
+    <div class="header-inner" id="headerInner">
       <div class="company-logo">
         <img src="logotry.gif" alt="UniDrop Logo">
       </div>
@@ -211,9 +221,7 @@
   </header>
 
   <!-- Chat area -->
-  <main class="chat-container" id="chat-container">
-    <!-- Messages will load here -->
-  </main>
+  <main class="chat-container" id="chat-container"></main>
 
   <!-- Chat input -->
   <div class="chat-input">
@@ -247,6 +255,7 @@
     const messageInput = document.getElementById("messageInput");
     const sendBtn = document.getElementById("sendBtn");
     const deleteSelected = document.getElementById("deleteSelected");
+    const headerInner = document.getElementById("headerInner");
 
     let longPressTimer;
     let selectedMessage = null;
@@ -294,6 +303,9 @@
         if (selectedMessage) selectedMessage.classList.remove("selected");
         selectedMessage = msg;
         msg.classList.add("selected");
+
+        // Switch header
+        headerInner.classList.add("hidden");
         deleteSelected.style.display = "block";
       }, 600);
     });
@@ -307,6 +319,17 @@
       await db.collection("chat").doc(id).delete();
       selectedMessage = null;
       deleteSelected.style.display = "none";
+      headerInner.classList.remove("hidden");
+    });
+
+    // Click anywhere else to deselect
+    document.addEventListener("click", e => {
+      if (!e.target.closest(".message") && selectedMessage) {
+        selectedMessage.classList.remove("selected");
+        selectedMessage = null;
+        deleteSelected.style.display = "none";
+        headerInner.classList.remove("hidden");
+      }
     });
   </script>
 </body>
