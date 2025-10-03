@@ -34,10 +34,10 @@
       justify-content: center;
       background: linear-gradient(90deg, #6f1ab6, #9a33db);
       padding: 0.85rem 1.2rem;
-      border-bottom: none;
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 10;
     }
 
     .header-inner {
@@ -176,9 +176,31 @@
       text-shadow: 0 0 10px #6c22a3, 0 0 20px #4f0b93;
       font-weight: bold;
     }
+
+    /* Long-press context menu */
+    #messageMenu {
+      position: absolute;
+      display: none;
+      background: #3c1f60;
+      border: 1px solid #6f1ab6;
+      border-radius: 8px;
+      padding: 0.3rem 0;
+      z-index: 50;
+      min-width: 100px;
+    }
+    #messageMenu div {
+      padding: 0.5rem;
+      cursor: pointer;
+      color: white;
+      font-size: 0.95rem;
+    }
+    #messageMenu div:hover {
+      background: #622aac;
+    }
   </style>
 </head>
 <body>
+
   <!-- Header -->
   <header class="mobile-header">
     <div class="header-inner">
@@ -209,6 +231,12 @@
     <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
   </nav>
 
+  <!-- Context menu -->
+  <div id="messageMenu">
+    <div id="editMsg">Edit</div>
+    <div id="deleteMsg">Delete</div>
+  </div>
+
   <!-- Firebase Script -->
   <script>
     const firebaseConfig = {
@@ -227,6 +255,12 @@
     const messageInput = document.getElementById("messageInput");
     const sendBtn = document.getElementById("sendBtn");
 
+    const messageMenu = document.getElementById("messageMenu");
+    const editMsg = document.getElementById("editMsg");
+    const deleteMsg = document.getElementById("deleteMsg");
+
+    let longPressTimer;
+    let selectedMessage = null;
     const userId = "user123";
 
     // Listen for new messages
@@ -242,27 +276,76 @@
           div.textContent = data.text;
           chatContainer.appendChild(div);
         });
-        // Scroll to bottom
         chatContainer.scrollTop = chatContainer.scrollHeight;
       });
 
     // Send message
     sendBtn.addEventListener("click", async () => {
       const text = messageInput.value.trim();
-      if (text === "") return;
+      if (!text) return;
 
       await db.collection("chat").add({
         text,
         sender: userId,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
-
       messageInput.value = "";
     });
 
-    // Enter key sends
     messageInput.addEventListener("keypress", e => {
       if (e.key === "Enter") sendBtn.click();
+    });
+
+    // Long-press menu
+    chatContainer.addEventListener("touchstart", e => {
+      const msg = e.target.closest(".message");
+      if (!msg) return;
+
+      selectedMessage = msg;
+      longPressTimer = setTimeout(() => {
+        showMenu(msg, e.touches[0].clientX, e.touches[0].clientY);
+      }, 600);
+    });
+
+    chatContainer.addEventListener("touchend", e => clearTimeout(longPressTimer));
+
+    function showMenu(msg, x, y) {
+      messageMenu.style.left = x + "px";
+      messageMenu.style.top = y + "px";
+      messageMenu.style.display = "block";
+    }
+
+    document.addEventListener("click", e => {
+      if (!e.target.closest("#messageMenu")) {
+        messageMenu.style.display = "none";
+      }
+    });
+
+    // Delete message
+    deleteMsg.addEventListener("click", async () => {
+      if (!selectedMessage) return;
+
+      const text = selectedMessage.textContent;
+      const snapshot = await db.collection("chat").where("text", "==", text).get();
+      snapshot.forEach(doc => doc.ref.delete());
+
+      messageMenu.style.display = "none";
+    });
+
+    // Edit message
+    editMsg.addEventListener("click", () => {
+      if (!selectedMessage) return;
+
+      const newText = prompt("Edit your message:", selectedMessage.textContent);
+      if (newText === null) return;
+
+      const text = selectedMessage.textContent;
+      db.collection("chat").where("text", "==", text).get()
+        .then(snapshot => {
+          snapshot.forEach(doc => doc.ref.update({ text: newText }));
+        });
+
+      messageMenu.style.display = "none";
     });
   </script>
 </body>
