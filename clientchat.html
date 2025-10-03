@@ -31,13 +31,13 @@
     .mobile-header {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       background: linear-gradient(90deg, #6f1ab6, #9a33db);
       padding: 0.85rem 1.2rem;
-      border-bottom: none;
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 10;
     }
 
     .header-inner {
@@ -66,6 +66,18 @@
       letter-spacing: 0.5px;
     }
 
+    /* Delete button in header */
+    #deleteSelected {
+      display: none;
+      background: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
     /* Scrollable chat container */
     .chat-container {
       position: absolute;
@@ -86,6 +98,7 @@
       padding: 0.75rem 1rem;
       border-radius: 12px;
       word-wrap: break-word;
+      transition: background 0.2s, transform 0.2s;
     }
 
     .message.user {
@@ -97,6 +110,12 @@
     .message.admin {
       background: #622aac;
       align-self: flex-start;
+    }
+
+    /* Highlighted message */
+    .message.selected {
+      background: #ff4d4d !important;
+      transform: scale(1.03);
     }
 
     /* Fixed chat input above nav */
@@ -187,6 +206,7 @@
       </div>
       <div class="company-name">UniDrop</div>
     </div>
+    <button id="deleteSelected">Delete</button>
   </header>
 
   <!-- Chat area -->
@@ -209,7 +229,6 @@
     <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
   </nav>
 
-  <!-- Firebase Script -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCjP_ZvkY1cwCmPE738KMGYOohZJt4py3c",
@@ -226,10 +245,13 @@
     const chatContainer = document.getElementById("chat-container");
     const messageInput = document.getElementById("messageInput");
     const sendBtn = document.getElementById("sendBtn");
+    const deleteSelected = document.getElementById("deleteSelected");
 
+    let longPressTimer;
+    let selectedMessage = null;
     const userId = "user123";
 
-    // Listen for new messages
+    // Load messages
     db.collection("chat")
       .orderBy("timestamp")
       .onSnapshot(snapshot => {
@@ -238,31 +260,52 @@
           const data = doc.data();
           const div = document.createElement("div");
           div.classList.add("message");
+          div.dataset.id = doc.id;
           div.classList.add(data.sender === "admin" ? "admin" : "user");
           div.textContent = data.text;
           chatContainer.appendChild(div);
         });
-        // Scroll to bottom
         chatContainer.scrollTop = chatContainer.scrollHeight;
       });
 
     // Send message
     sendBtn.addEventListener("click", async () => {
       const text = messageInput.value.trim();
-      if (text === "") return;
-
+      if (!text) return;
       await db.collection("chat").add({
         text,
         sender: userId,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
-
       messageInput.value = "";
     });
 
-    // Enter key sends
     messageInput.addEventListener("keypress", e => {
       if (e.key === "Enter") sendBtn.click();
+    });
+
+    // Long-press to select message
+    chatContainer.addEventListener("touchstart", e => {
+      const msg = e.target.closest(".message");
+      if (!msg) return;
+
+      longPressTimer = setTimeout(() => {
+        if (selectedMessage) selectedMessage.classList.remove("selected");
+        selectedMessage = msg;
+        msg.classList.add("selected");
+        deleteSelected.style.display = "block";
+      }, 600);
+    });
+
+    chatContainer.addEventListener("touchend", e => clearTimeout(longPressTimer));
+
+    // Delete button
+    deleteSelected.addEventListener("click", async () => {
+      if (!selectedMessage) return;
+      const id = selectedMessage.dataset.id;
+      await db.collection("chat").doc(id).delete();
+      selectedMessage = null;
+      deleteSelected.style.display = "none";
     });
   </script>
 </body>
