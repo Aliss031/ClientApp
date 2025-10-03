@@ -15,16 +15,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
+    :root {
+      --header-h: 70px;
+      --nav-h: 65px;
+    }
+
     body {
       margin: 0;
       font-family: 'Roboto', Arial, sans-serif;
       background: linear-gradient(180deg, #2a0845, #20002c);
       color: white;
       height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      overflow: hidden; /* prevent body scroll */
     }
 
     /* Top header */
@@ -32,7 +34,8 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
+      right: 0;
+      height: var(--header-h);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -70,16 +73,24 @@
       letter-spacing: 0.5px;
     }
 
-    /* QR Container */
-    .qr-container {
-      margin-top: 120px; /* space below header */
+    /* Scrollable middle area */
+    .scroll-area {
+      position: fixed;
+      top: var(--header-h);
+      bottom: var(--nav-h);
+      left: 0;
+      right: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 1rem;
+      padding: 1rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
+    /* QR Card */
     .qr-card {
       background: white;
       padding: 1.5rem;
@@ -97,12 +108,14 @@
     }
 
     .timer-text {
+      margin-top: 1rem;
       font-size: 1rem;
       color: #ffffff;
     }
 
     .regenerate-btn {
       display: none;
+      margin-top: 1rem;
       background: #6f1ab6;
       border: none;
       padding: 0.8rem 1.6rem;
@@ -113,6 +126,10 @@
       font-size: 1rem;
     }
 
+    .regenerate-btn:hover {
+      opacity: 0.9;
+    }
+
     /* Bottom Nav */
     nav {
       position: fixed;
@@ -120,7 +137,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
-      height: 65px;
+      height: var(--nav-h);
       background: rgba(108,44,187,0.95);
       backdrop-filter: blur(10px);
       border-top-left-radius: 40px;
@@ -168,8 +185,8 @@
     </div>
   </header>
 
-  <!-- QR Content -->
-  <div class="qr-container">
+  <!-- Scrollable QR area -->
+  <div class="scroll-area">
     <div class="qr-card" id="qrCard">
       <div id="qrCode"></div>
     </div>
@@ -225,10 +242,8 @@
     }
 
     function expireQR() {
-      // Hide card & timer
       qrCard.style.display = "none";
       timerText.style.display = "none";
-      // Show regenerate button
       regenerateBtn.style.display = "block";
     }
 
@@ -243,7 +258,7 @@
     // Initial QR
     showQR();
 
-    // Regenerate button click
+    // Regenerate button
     regenerateBtn.addEventListener("click", () => {
       showQR();
     });
