@@ -45,7 +45,7 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      transition: opacity 0.1s ease;
+      transition: opacity 0.1s;
     }
 
     .header-inner.hidden {
@@ -86,12 +86,7 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      transition: opacity 0.1s ease;
-    }
-
-    #deleteSelected.visible {
-      opacity: 1;
-      pointer-events: auto;
+      transition: opacity 0.1s;
     }
 
     /* Scrollable chat container */
@@ -311,7 +306,7 @@
 
         // Switch header
         headerInner.classList.add("hidden");
-        deleteSelected.style.display = "visible";
+        deleteSelected.style.display = "block";
       }, 600);
     });
 
@@ -323,7 +318,7 @@
       const id = selectedMessage.dataset.id;
       await db.collection("chat").doc(id).delete();
       selectedMessage = null;
-      deleteSelected.style.display = "visible";
+      deleteSelected.style.display = "none";
       headerInner.classList.remove("hidden");
     });
 
