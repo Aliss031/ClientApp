@@ -18,15 +18,38 @@
       background: linear-gradient(180deg, #2a0845, #20002c);
       color: white;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden; /* make page unscrollable */
+      gap: 1rem;
+    }
+
+    /* Branding row (logo + name side by side) */
+    .branding {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .branding img {
+      width: 70px;
+      height: 70px;
+      border-radius: 20%;
+      object-fit: cover;
+    }
+
+    .branding h1 {
+      font-size: 2rem;
+      margin: 0;
+      font-weight: 700;
     }
 
     .signin-container {
       width: 80%;
       max-width: 250px;
-      height: 400px;
       background: #3c1f60;
       padding: 2rem;
       border-radius: 16px;
@@ -40,15 +63,9 @@
       text-align: center;
     }
 
-    .signin-header img {
-      width: 90px;
-      height: 90px;
-      margin-bottom: 0.8rem;
-    }
-
     .signin-header h2 {
       font-weight: 700;
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       margin: 0;
     }
 
@@ -106,20 +123,19 @@
     .extra-links a:hover {
       text-decoration: underline;
     }
-
-    .company-logo {
-      width: 70px;
-      height: 70px;
-      border-radius: 20%; /* rounded */
-      object-fit: cover;
-    }
   </style>
 </head>
 <body>
+  <!-- Logo + App Name side by side -->
+  <div class="branding">
+    <img src="logotry.gif" alt="UniDrop Logo">
+    <h1>UniDrop</h1>
+  </div>
+
+  <!-- Sign-in Card -->
   <div class="signin-container">
     <div class="signin-header">
-     <img src="logotry.gif" alt="UniDrop Logo" class="company-logo">
-     <h2>Welcome Back</h2>
+      <h2>Welcome Back</h2>
     </div>
 
     <div class="input-group">
