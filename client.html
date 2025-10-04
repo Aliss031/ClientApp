@@ -132,28 +132,6 @@
       font-weight: bold;
     }
 
-    /* Special QR button */
-    .qr-nav {
-      background: #ffcc66;
-      color: #24033d !important;
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      right: 17%;
-      transform: translateX(50%) translateY(-25%);
-      bottom: 90px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-      transition: transform 0.25s ease;
-    }
-
-    .qr-nav i {
-      font-size: 2.5rem;
-      color: #24033d;
-    }
 
     /* QR Modal */
     .modal {
@@ -229,26 +207,23 @@
   <div class="card-container">
     <section>
       <div class="content-box">
-        <p>Card 1: Welcome to UniDrop! Mobile-only layout.</p>
+        <p><strong>Welcome to UniDrop! 📦</strong></p>
+        <ol>
+          <li>Register your account on the UniDrop website.</li>
+          <li>Get your UniDrop ID from the website.</li>
+          <li>When shopping online, add your UniDrop ID after your name.<br>
+              👉 Example: &lt;Name&gt;&lt;UniDrop ID&gt;</li>
+          <li>Once your package arrives, you’ll receive a WhatsApp notification.</li>
+          <li>Click the link in WhatsApp to go to the UniDrop website.</li>
+          <li>Sign in to your account.</li>
+          <li>Tap <strong>“QR”</strong> to get your verification QR code.</li>
+          <li>Scan your QR at the UniDrop hub to retrieve your parcel. 🎁</li>
+        </ol>
+        <p>🚀 That’s it! Fast & secure parcel collection with UniDrop.</p>
       </div>
-      <div class="content-box">
-        <p>Card 2: This card demonstrates spacing and scrolling.</p>
-      </div>
-      <div class="content-box">
-        <p>Card 3: Scrollable container only.</p>
-      </div>
-      <div class="content-box">
-        <p>Card 4: Add as many cards as you want here.</p>
-      </div>
-      <div class="content-box">
-        <p>Card 5: Scroll down to see more content.</p>
-      </div>
-      <div class="content-box">
-        <p>Card 6: Header and nav stay fixed.</p>
-      </div>
-      <div class="content-box">
-        <p>Card 7: Perfect for multiple sections.</p>
-      </div>
+
+      
+      
     </section>
   </div>
 
@@ -260,16 +235,6 @@
     <a href="clientprofile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
   </nav>
-
-  <!-- QR Modal -->
-  <div class="modal" id="qrModal">
-    <div class="modal-content">
-      <h2>Scan this QR</h2>
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UniDropExample" alt="QR Code">
-      <br>
-      <button class="close-btn" id="closeModal">Close</button>
-    </div>
-  </div>
 
   <script>
     const qrBtn = document.getElementById("qrBtn");
@@ -294,14 +259,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
