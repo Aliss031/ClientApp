@@ -2,32 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Register - UniDrop</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       font-family: 'Poppins', sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow: hidden; /* lock scrolling */
       background: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      height: 100vh;
-      overflow-x: hidden;
     }
 
     /* Top curved purple header */
     .header {
       width: 100%;
-      height: 150px;
+      height: 30%;
       background: linear-gradient(135deg, #6f1ab6, #a349d7);
       border-bottom-left-radius: 50%;
       border-bottom-right-radius: 50%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-end;
       position: relative;
     }
 
@@ -37,22 +38,24 @@
       border-radius: 50%;
       background: white;
       padding: 10px;
-      margin-top:150px;
+      position: absolute;
+      bottom: -50px; /* overlaps header & form */
     }
 
     /* Form container */
     .form-container {
-      width: 100%;
-      height:60%;
-      max-width: 350px;/* overlap avatar with header */
+      flex: 1;
+      width: 90%;
+      max-width: 360px;
       background: #fff;
-      border-bottom-right-radius: 15px;
-      border-bottom-left-radius: 15px;
-      padding: 50px;
-      padding-top: 60px;
-      padding-bottom: 20px;
+      border-radius: 15px;
+      padding: 70px 20px 20px; /* top padding makes space for avatar */
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-top: 60px;
     }
 
     .form-container h2 {
@@ -143,7 +146,7 @@
     .dots {
       display: flex;
       justify-content: center;
-      margin-top: 15px;
+      margin-top: auto; /* push dots to bottom */
       gap: 8px;
     }
 
