@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Register - UniDrop</title>
+  <title>Log In - UniDrop</title>
   <style>
     html, body {
       margin: 0;
@@ -11,7 +11,7 @@
       font-family: 'Poppins', sans-serif;
       height: 100%;
       width: 100%;
-      overflow: hidden; /* lock scrolling */
+      overflow: hidden;
       background: #ffffff;
       display: flex;
       flex-direction: column;
@@ -39,11 +39,10 @@
       background: #ffffff;
       padding: 10px;
       position: absolute;
-      bottom: -50px; /* overlaps header & form */
-      border: 3px solid #6f1ab6; /* purple outline */
-      box-shadow: 0 0 8px rgba(0,0,0,0.2); /* optional glow */
+      bottom: -50px;
+      border: 3px solid #6f1ab6;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
     }
-
 
     /* Form container */
     .form-container {
@@ -52,14 +51,13 @@
       max-width: 360px;
       background: #fff;
       border-radius: 15px;
-      padding: 70px 20px 20px; /* top padding makes space for avatar */
+      padding: 70px 20px 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       padding: 50px;
       padding-top: 50px;
-      
     }
 
     .form-container h2 {
@@ -150,7 +148,7 @@
     .dots {
       display: flex;
       justify-content: center;
-      margin-top: 30px; /* push dots to bottom */
+      margin-top: 30px;
       gap: 3px;
     }
 
@@ -166,8 +164,13 @@
       background: #6f1ab6;
     }
   </style>
+
   <!-- For icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <!-- Header with avatar -->
@@ -181,15 +184,15 @@
 
     <div class="input-box">
       <i class="fa fa-user"></i>
-      <input type="text" placeholder="Enter your username">
+      <input type="text" id="username" placeholder="Enter your username">
     </div>
 
     <div class="input-box">
       <i class="fa fa-lock"></i>
-      <input type="password" placeholder="Password">
+      <input type="password" id="password" placeholder="Password">
     </div>
 
-    <button>Log In</button>
+    <button id="loginBtn">Log In</button>
 
     <div class="links">
       <a href="#">Forget Password?</a>
@@ -199,14 +202,59 @@
     <div class="divider">or</div>
 
     <div class="signup">
-      Don’t have an account? <a href="signup.html">Sign Up</a>
+      Don’t have an account? <a href="signup.html">Register</a>
     </div>
 
     <div class="dots">
       <span class="active"></span>
       <span></span>
-      
     </div>
   </div>
+
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjP_ZvkY1cwCmPE738KMGYOohZJt4py3c",
+      authDomain: "parcel-pin-system.firebaseapp.com",
+      projectId: "parcel-pin-system",
+      storageBucket: "parcel-pin-system.firebasestorage.app",
+      messagingSenderId: "444891168630",
+      appId: "1:444891168630:web:7dacb5087988c6325ac457"
+    };
+
+    // Init Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const loginBtn = document.getElementById("loginBtn");
+
+    loginBtn.addEventListener("click", async () => {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !password) {
+        alert("Please enter username and password.");
+        return;
+      }
+
+      try {
+        const querySnapshot = await db.collection("registration")
+          .where("username", "==", username)
+          .where("password", "==", password) // ⚠ plain-text, not secure
+          .get();
+
+        if (!querySnapshot.empty) {
+          alert("Login successful!");
+          // Redirect to home/dashboard
+          window.location.href = "client.html";
+        } else {
+          alert("Invalid username or password.");
+        }
+      } catch (err) {
+        console.error("Error logging in:", err);
+        alert("Error: " + err.message);
+      }
+    });
+  </script>
 </body>
 </html>
