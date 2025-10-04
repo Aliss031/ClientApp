@@ -11,7 +11,7 @@
       font-family: 'Poppins', sans-serif;
       height: 100%;
       width: 100%;
-      overflow: hidden; /* lock scrolling */
+      overflow: hidden;
       background: #ffffff;
       display: flex;
       flex-direction: column;
@@ -39,9 +39,9 @@
       background: #ffffff;
       padding: 10px;
       position: absolute;
-      bottom: -50px; /* overlaps header & form */
-      border: 3px solid #6f1ab6; /* purple outline */
-      box-shadow: 0 0 8px rgba(0,0,0,0.2); /* optional glow */
+      bottom: -50px;
+      border: 3px solid #6f1ab6;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
     }
 
     /* Form container */
@@ -51,11 +51,13 @@
       max-width: 360px;
       background: #fff;
       border-radius: 15px;
-      padding: 70px 20px 20px; /* top padding makes space for avatar */
+      padding: 70px 20px 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
+      padding: 50px;
+      padding-top: 50px;
     }
 
     .form-container h2 {
@@ -101,19 +103,6 @@
 
     .form-container button:hover {
       background: #531289;
-    }
-
-    .links {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      margin: 10px 0;
-    }
-
-    .links a {
-      text-decoration: none;
-      color: #6f1ab6;
-      font-weight: 500;
     }
 
     .divider {
@@ -162,8 +151,13 @@
       background: #6f1ab6;
     }
   </style>
+
   <!-- For icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <!-- Header with avatar -->
@@ -177,32 +171,76 @@
 
     <div class="input-box">
       <i class="fa fa-user"></i>
-      <input type="text" placeholder="Username">
+      <input type="text" id="username" placeholder="Username">
     </div>
 
     <div class="input-box">
       <i class="fa fa-phone"></i>
-      <input type="tel" placeholder="Phone Number">
+      <input type="tel" id="phone" placeholder="Phone Number">
     </div>
 
     <div class="input-box">
       <i class="fa fa-lock"></i>
-      <input type="password" placeholder="Password">
+      <input type="password" id="password" placeholder="Password">
     </div>
 
-    <button>Sign Up</button>
+    <button id="registerBtn">Register</button>
 
     <div class="divider">or</div>
 
     <div class="signup">
-      Already have an account? <a href="index.html">Log In</a>
+      Already have an account? <a href="signin.html">Log In</a>
     </div>
 
     <div class="dots">
       <span></span>
       <span class="active"></span>
-      
     </div>
   </div>
+
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjP_ZvkY1cwCmPE738KMGYOohZJt4py3c",
+      authDomain: "parcel-pin-system.firebaseapp.com",
+      projectId: "parcel-pin-system",
+      storageBucket: "parcel-pin-system.firebasestorage.app",
+      messagingSenderId: "444891168630",
+      appId: "1:444891168630:web:7dacb5087988c6325ac457"
+    };
+
+    // Init Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Handle registration
+    const registerBtn = document.getElementById("registerBtn");
+    registerBtn.addEventListener("click", async () => {
+      const username = document.getElementById("username").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !phone || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      try {
+        await db.collection("registration").add({
+          username: username,
+          phone: phone,
+          password: password, // ⚠ should hash or use Firebase Auth
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("Registration successful!");
+        document.getElementById("username").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("password").value = "";
+      } catch (err) {
+        console.error("Error registering:", err);
+        alert("Error: " + err.message);
+      }
+    });
+  </script>
 </body>
 </html>
