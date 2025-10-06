@@ -27,7 +27,6 @@
       overflow: hidden;
     }
 
-    /* Fixed header */
     .mobile-header {
       display: flex;
       align-items: center;
@@ -73,7 +72,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Delete button in header */
     #deleteSelected {
       display: none;
       background: #ff4d4d;
@@ -89,11 +87,10 @@
       transition: opacity 0.1s;
     }
 
-    /* Scrollable chat container */
     .chat-container {
       position: absolute;
-      top: 80px;      /* header height */
-      bottom: 140px;  /* input + nav */
+      top: 80px;
+      bottom: 140px;
       left: 0;
       right: 0;
       padding: 0.5rem;
@@ -123,16 +120,14 @@
       align-self: flex-start;
     }
 
-    /* Highlighted message */
     .message.selected {
       background: #ff4d4d !important;
       transform: scale(1.03);
     }
 
-    /* Fixed chat input above nav */
     .chat-input {
       position: fixed;
-      bottom: 67px;  /* above nav */
+      bottom: 67px;
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -164,7 +159,6 @@
       cursor: pointer;
     }
 
-    /* Fixed bottom nav */
     nav {
       position: fixed;
       bottom: 0;
@@ -261,7 +255,47 @@
     let selectedMessage = null;
     const userId = "user123";
 
-    // Load messages
+    // UniDrop chatbot knowledge base
+    const botResponses = {
+      "hours": {
+        keywords: ["hours", "time", "open", "close", "when"],
+        reply: "UniDrop is open 24/7, so you can collect or drop off parcels anytime!"
+      },
+      "location": {
+        keywords: ["where", "location", "address", "place"],
+        reply: "UniDrop is located at your university campus, near the main entrance."
+      },
+      "help": {
+        keywords: ["help", "assist", "support", "problem"],
+        reply: "Sure! I can help you with operating hours, parcel collection, and location info."
+      },
+      "collect": {
+        keywords: ["collect", "pickup", "take", "retrieve"],
+        reply: "To collect your parcel, simply scan your QR code at the UniDrop locker and follow the instructions."
+      },
+      "drop": {
+        keywords: ["drop", "deliver", "send", "leave"],
+        reply: "To drop off a parcel, use the QR code provided and place your item securely in the locker."
+      },
+      "default": {
+        reply: "I'm not sure about that. Try asking about hours, collection, drop-off, or location."
+      }
+    };
+
+    // Function to detect intent based on keywords
+    function getBotResponse(message) {
+      const lowerMsg = message.toLowerCase();
+      for (let intent in botResponses) {
+        if (intent !== "default") {
+          if (botResponses[intent].keywords.some(word => lowerMsg.includes(word))) {
+            return botResponses[intent].reply;
+          }
+        }
+      }
+      return botResponses["default"].reply;
+    }
+
+    // Load messages from Firestore
     db.collection("chat")
       .orderBy("timestamp")
       .onSnapshot(snapshot => {
@@ -278,15 +312,28 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       });
 
-    // Send message
+    // Send message + trigger bot
     sendBtn.addEventListener("click", async () => {
       const text = messageInput.value.trim();
       if (!text) return;
+
+      // Save user message
       await db.collection("chat").add({
         text,
         sender: userId,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
+
+      // Generate bot response
+      const reply = getBotResponse(text);
+      setTimeout(async () => {
+        await db.collection("chat").add({
+          text: reply,
+          sender: "admin",
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }, 500);
+
       messageInput.value = "";
     });
 
@@ -294,17 +341,14 @@
       if (e.key === "Enter") sendBtn.click();
     });
 
-    // Long-press to select message
+    // Long-press select + delete
     chatContainer.addEventListener("touchstart", e => {
       const msg = e.target.closest(".message");
       if (!msg) return;
-
       longPressTimer = setTimeout(() => {
         if (selectedMessage) selectedMessage.classList.remove("selected");
         selectedMessage = msg;
         msg.classList.add("selected");
-
-        // Switch header
         headerInner.classList.add("hidden");
         deleteSelected.style.display = "block";
       }, 600);
@@ -312,7 +356,6 @@
 
     chatContainer.addEventListener("touchend", e => clearTimeout(longPressTimer));
 
-    // Delete button
     deleteSelected.addEventListener("click", async () => {
       if (!selectedMessage) return;
       const id = selectedMessage.dataset.id;
@@ -322,7 +365,6 @@
       headerInner.classList.remove("hidden");
     });
 
-    // Click anywhere else to deselect
     document.addEventListener("click", e => {
       if (!e.target.closest(".message") && selectedMessage) {
         selectedMessage.classList.remove("selected");
